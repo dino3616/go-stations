@@ -1,0 +1,20 @@
+{
+  "name": "go-stations",
+  "workspaceFolder": "go-stations",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "app",
+  "extensions": [
+    "adam-bender.commit-message-editor",
+    "mikestead.dotenv",
+    "usernamehw.errorlens",
+    "github.copilot",
+    "eamodio.gitlens",
+    "golang.go",
+    "visualstudioexptteam.vscodeintellic",
+    "esbenp.prettier-vscode",
+    "tabnine.tabnine-vscode",
+    "techtrain.railway-vscode",
+    "hbenl.vscode-test-explorer",
+    "gruntfuggly.todo-tree"
+  ]
+}
