@@ -5,13 +5,17 @@ import (
 	"net/http"
 
 	"github.com/TechBowl-japan/go-stations/handler"
+	"github.com/TechBowl-japan/go-stations/service"
 )
 
 func NewRouter(todoDB *sql.DB) *http.ServeMux {
 	// register routes
 	mux := http.NewServeMux()
 
+	todoService := service.NewTODOService(todoDB)
+
 	mux.HandleFunc("/healthz", handler.NewHealthzHandler().ServeHTTP)
+	mux.HandleFunc("/todos", handler.NewTODOHandler(todoService).ServeHTTP)
 
 	return mux
 }
