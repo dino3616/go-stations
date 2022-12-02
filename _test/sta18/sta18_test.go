@@ -9,6 +9,7 @@ import (
 	"github.com/TechBowl-japan/go-stations/db"
 	"github.com/TechBowl-japan/go-stations/model"
 	"github.com/TechBowl-japan/go-stations/service"
+	"github.com/mattn/go-sqlite3"
 )
 
 func TestStation18(t *testing.T) {
@@ -72,18 +73,17 @@ func TestStation18(t *testing.T) {
 		WantError error
 	}{
 		"Not found ID": {
-			IDs:       []int64{4},
-			WantError: &model.ErrNotFound{},
+			IDs: []int64{4},
 		},
 		"One delete": {
-			IDs:       []int64{1},
-			WantError: nil,
+			IDs: []int64{1},
 		},
 		"Multiple delete": {
-			IDs:       []int64{2, 3},
-			WantError: nil,
+			IDs: []int64{2, 3},
 		},
 	}
+
+	var sqlite3Err sqlite3.Error
 
 	for name, tc := range testcases {
 		name := name
@@ -92,16 +92,9 @@ func TestStation18(t *testing.T) {
 			t.Parallel()
 
 			err := service.NewTODOService(todoDB).DeleteTODO(context.Background(), tc.IDs)
-
-			switch tc.WantError {
-			case nil:
-				if err != nil {
-					t.Errorf("予期しないエラーが発生しました: %v", err)
-					return
-				}
-			default:
-				if !errors.As(err, &tc.WantError) {
-					t.Errorf("期待していないエラーの型です, got = %+v, want = %+v", err, tc.WantError)
+			if err != nil {
+				if !errors.As(err, &sqlite3Err) {
+					t.Errorf("期待していないエラーの型です, got = %+v, want = %+v", err, sqlite3Err)
 					return
 				}
 			}
